@@ -518,7 +518,7 @@
     <!--編集箇所（見た目部分）-->
     <div class="container">
         <h1>HaLe'L.A<br>アンケートフォーム</h1>
-        <div class="info-text">以下全て入力後【アンケート送信】ボタンを押してください。</div>
+        <div class="info-text">以下全て入力後【送信】ボタンを押してください。</div>
 
         <div class="label"><span class="required">必須</span>性別</div>
         <div class="priority-buttons">
@@ -550,7 +550,7 @@
             <button type="button" id="sixmenu" onclick="selectmenu(this)">ヘッドスパ</button>
         </div>
         
-        <button class="submit-button" onclick="submitForm()" div id="section-message">送信</button>
+        <button class="submit-button" onclick="submitForm()" id="section-message">送信</button>
     </div>
     <!-------------------------------------------------->
 
@@ -559,18 +559,30 @@
         let priorityCount = '';
         let oldCount = '';
         let menuCount = '';
+        let liffInitialized = false;
 
-        // LIFF初期化
+        // LIFF SDKの読み込み完了を待つ
+        function initLiff() {
+            if (typeof liff !== 'undefined') {
+                liff.init({
+                    liffId: '2007491237-q6wdkAwM' // ここにあなたのLIFF IDを入力*********************忘れない！！！！******************************
+                }).then(() => {
+                    // LIFF初期化成功時の処理
+                    console.log('LIFF初期化成功');
+                    liffInitialized = true;
+                }).catch((err) => {
+                    // LIFF初期化失敗時の処理
+                    console.error('LIFF初期化失敗', err);
+                });
+            } else {
+                // LIFF SDKがまだ読み込まれていない場合、少し待ってから再試行
+                setTimeout(initLiff, 100);
+            }
+        }
+
+        // DOMContentLoadedイベントでLIFF初期化を開始
         document.addEventListener('DOMContentLoaded', function () {
-            liff.init({
-                liffId: '2007491237-q6wdkAwM' // ここにあなたのLIFF IDを入力*********************忘れない！！！！******************************
-            }).then(() => {
-                // LIFF初期化成功時の処理
-                console.log('LIFF初期化成功');
-            }).catch((err) => {
-                // LIFF初期化失敗時の処理
-                console.error('LIFF初期化失敗', err);
-            });
+            initLiff();
         });
 
         // プレースホルダーを非表示にする関数
@@ -618,16 +630,19 @@
 
         //見た目変更した際に不要な物は消す！
         function submitForm() {
+            // LIFF が初期化されているかチェック
+            if (!liffInitialized || typeof liff === 'undefined') {
+                alert('LINE連携の準備中です。少し待ってから再度お試しください。');
+                return;
+            }
+
             const message = document.getElementById('message').value;
-            priorityCount: priorityCount;
-            oldCount: oldCount;
-            menuCount: menuCount;
 
             const formData = {
                 message,
-                menucount,
                 priorityCount,
                 oldCount,
+                menuCount
             };
 
             // フォームデータのチェック
@@ -648,7 +663,7 @@
                 return;
             }
 
-                        // フォームデータのチェック
+            // フォームデータのチェック
             if (!formData.menuCount) {
                 alert('気になるメニューを入力してください。');
                 return;
@@ -657,15 +672,16 @@
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `≪アンケート≫\n【性別】\n・${formData.priorityCount}\n\n【誕生日月】\n・${formData.message}\n\n【年代】\n・${formData.oldCount}\n\n【気になるメニュー】\n・${formData.menucount}`
+                text: `≪アンケート≫\n【性別】\n・${formData.priorityCount}\n\n【誕生日月】\n・${formData.message}\n\n【年代】\n・${formData.oldCount}\n\n【気になるメニュー】\n・${formData.menuCount}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
-                alert('ご記入ありがとうございます。同意書が表示されますので、ご確認ください。');
+                alert('ご記入ありがとうございます。');
                 /* LIFFウィンドウを閉じる */
                 liff.closeWindow();
             }).catch((err) => {
                 /* メッセージ送信失敗時の処理 */
                 console.error('メッセージの送信に失敗しました', err);
+                alert('送信に失敗しました。もう一度お試しください。');
             });
         }
 
