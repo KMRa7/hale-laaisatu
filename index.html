@@ -541,11 +541,12 @@
         <!--必須を追加する場合　<span class="required">必須</span>-->
         <div class="label"><span class="required">必須</span>気になるメニュー</div>
         <div class="menu-buttons">
-            <button type="button" id="onemenu" onclick="selectold(this)">20代</button>
-            <button type="button" id="twomenu" onclick="selectold(this)">30代</button>
-            <button type="button" id="threemenu" onclick="selectold(this)">40代</button>
-            <button type="button" id="fourmenu" onclick="selectold(this)">50代</button>
-            <button type="button" id="fivemenu" onclick="selectold(this)">60代</button>
+            <button type="button" id="onemenu" onclick="selectold(this)">カット</button>
+            <button type="button" id="twomenu" onclick="selectold(this)">パーマ</button>
+            <button type="button" id="threemenu" onclick="selectold(this)">カラー</button>
+            <button type="button" id="fourmenu" onclick="selectold(this)">ストレート</button>
+            <button type="button" id="fivemenu" onclick="selectold(this)">トリートメント</button>
+            <button type="button" id="fivemenu" onclick="selectold(this)">ヘッドスパ</button>
         </div>
         
         <button class="submit-button" onclick="submitForm()" div id="section-message">送信</button>
@@ -556,6 +557,7 @@
     <script>
         let priorityCount = '';
         let oldCount = '';
+        let menuCount = '';
 
         // LIFF初期化
         document.addEventListener('DOMContentLoaded', function () {
@@ -616,7 +618,6 @@
         //見た目変更した際に不要な物は消す！
         function submitForm() {
             const message = document.getElementById('message').value;
-            const message2 = document.getElementById('message2').value;
             priorityCount: priorityCount;
             demandCount: oldCount;
             menuCount: menuCount;
