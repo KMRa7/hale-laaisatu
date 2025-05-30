@@ -547,7 +547,7 @@
             <button type="button" id="threemenu" onclick="selectmenu(this)">カラー</button>
             <button type="button" id="fourmenu" onclick="selectmenu(this)">ストレート</button>
             <button type="button" id="fivemenu" onclick="selectmenu(this)">トリートメント</button>
-            <button type="button" id="fivemenu" onclick="selectmenu(this)">ヘッドスパ</button>
+            <button type="button" id="sixmenu" onclick="selectmenu(this)">ヘッドスパ</button>
         </div>
         
         <button class="submit-button" onclick="submitForm()" div id="section-message">送信</button>
@@ -657,7 +657,7 @@
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `≪アンケート≫\n【性別】\n・${formData.priorityCount}\n\n【誕生日月】\n・${formData.message}\n\n【年代】\n・${formData.oldCount}\n\n【気になるメニュー】\n・${formData.menu}`
+                text: `≪アンケート≫\n【性別】\n・${formData.priorityCount}\n\n【誕生日月】\n・${formData.message}\n\n【年代】\n・${formData.oldCount}\n\n【気になるメニュー】\n・${formData.menucount}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('ご記入ありがとうございます。同意書が表示されますので、ご確認ください。');
