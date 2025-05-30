@@ -540,7 +540,13 @@
 
         <!--必須を追加する場合　<span class="required">必須</span>-->
         <div class="label"><span class="required">必須</span>気になるメニュー</div>
-        <textarea id="message2" rows="1" placeholder="入力してください"></textarea> <!-- メッセージ入力フィールド -->
+        <div class="menu-buttons">
+            <button type="button" id="onemenu" onclick="selectold(this)">20代</button>
+            <button type="button" id="twomenu" onclick="selectold(this)">30代</button>
+            <button type="button" id="threemenu" onclick="selectold(this)">40代</button>
+            <button type="button" id="fourmenu" onclick="selectold(this)">50代</button>
+            <button type="button" id="fivemenu" onclick="selectold(this)">60代</button>
+        </div>
         
         <button class="submit-button" onclick="submitForm()" div id="section-message">送信</button>
     </div>
@@ -597,12 +603,23 @@
             oldCount = element.innerText;
         }
 
+        function selectmenu(element) {
+            // 単一選択項目の処理コード
+            const buttons = document.querySelectorAll('.menu-buttons button');
+            buttons.forEach(button => button.classList.remove('active'));
+
+            // 選択されたボタンだけにactiveクラスを追加
+            element.classList.add('active');
+            menuCount = element.innerText;
+        }
+
         //見た目変更した際に不要な物は消す！
         function submitForm() {
             const message = document.getElementById('message').value;
             const message2 = document.getElementById('message2').value;
             priorityCount: priorityCount;
             demandCount: oldCount;
+            menuCount: menuCount;
 
             const formData = {
                 message,
@@ -630,7 +647,7 @@
             }
 
                         // フォームデータのチェック
-            if (!formData.message2) {
+            if (!formData.menuCount) {
                 alert('気になるメニューを入力してください。');
                 return;
             }
@@ -638,7 +655,7 @@
             // LINEトークにメッセージを送信
             liff.sendMessages([{
                 type: 'text',
-                text: `≪アンケート≫\n【性別】\n・${formData.priorityCount}\n\n【誕生日月】\n・${formData.message}\n\n【年代】\n・${formData.oldCount}\n\n【気になるメニュー】\n・${formData.message2}`
+                text: `≪アンケート≫\n【性別】\n・${formData.priorityCount}\n\n【誕生日月】\n・${formData.message}\n\n【年代】\n・${formData.oldCount}\n\n【気になるメニュー】\n・${formData.menu}`
             }]).then(() => {
                 /* メッセージ送信成功時の処理 */
                 alert('ご記入ありがとうございます。同意書が表示されますので、ご確認ください。');
